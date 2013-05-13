@@ -44,11 +44,14 @@ $(OPENFST_BASENAME)/configure.ac: $(OPENFST_ARCHIVE)
 
 # call the configure script to create the platform-specific Makefile
 $(OPENFST_BASENAME)/Makefile: $(OPENFST_BASENAME)/configure.ac
-	( cd $(OPENFST_BASENAME) ; ./configure )
+	( cd $(OPENFST_BASENAME) ; ./configure --enable-bin=no --enable-static=no)
 
 # call the platform-specific Makefile
 $(FSTLIB): $(OPENFST_BASENAME)/Makefile
-	( cd $(OPENFST_BASENAME) ; $(MAKE) )
+	( cd $(OPENFST_BASENAME) ; $(MAKE) -j4 )
+
+$(OPENFST_ARCHIVE):
+	curl "http://www.openfst.org/twiki/pub/FST/FstDownload/$(OPENFST_ARCHIVE)" -o $(OPENFST_ARCHIVE)
 
 # this clean should work when continuing to development on the same platform
 clean:
